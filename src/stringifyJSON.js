@@ -12,7 +12,7 @@ var processArray = function(array) {
     //if array is empty, return blank
     return '';
   }
-  var element = array.shift()
+  var element = array.shift();
   //get first element of array
     //stringify 
     //if element is undefined, ret null
@@ -80,7 +80,8 @@ var stringifyJSON = function(obj) {
   } else if (typeof(obj) === 'object') {
   	if(Array.isArray(obj)) {
     //an array
-      return '[' + processArray(obj) + ']';
+      var arr = obj.slice();
+      return '[' + processArray(arr) + ']';
   	} else {
     //an object
       //each element in the object, stringify key, stringify element

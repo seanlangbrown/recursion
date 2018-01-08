@@ -1,5 +1,14 @@
 // test cases are described in fixtures.js
 describe('stringifyJSON', function() {
+  it('should not modify the input', function() {
+    stringifiableObjects.forEach(function(test) {
+      var obj = {before:test};
+      obj.result = stringifyJSON(test);
+      expect(obj.before).to.equal(test);
+    });
+  });
+
+
   it('should match the result of calling JSON.stringify', function() {
 
     stringifiableObjects.forEach(function(test) {
@@ -15,4 +24,5 @@ describe('stringifyJSON', function() {
     });
 
   });
+
 });
