@@ -53,7 +53,7 @@ var processObject = function(ob, keys) {
 
 var stringifyJSON = function(obj) {
   // your code goes here
-  console.log(JSON.stringify(obj));
+  //console.log(JSON.stringify(obj));
 
   //Base Casses
   if(typeof(obj) === 'string') {
