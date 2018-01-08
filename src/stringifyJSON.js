@@ -2,45 +2,46 @@
 // var stringifyJSON = JSON.stringify;
 
 // but you don't so you're going to write it from scratch:
-
-var stringifyJSON = function(obj) {
-  // your code goes here
-  var nullReplace = function(str) {
+var nullReplace = function(str) {
   	return (str === undefined) ? null : str ;
   }
 
-  var processArray = function(array) {
-	//get first element of array
-      var element = array.shift()
-        //stringify 
-      //if element is not an object, stringify
-      //if element is an object, stringify
-      str = nullReplace(stringifyJSON(element));
-      //if last element
-      if(obj.length === 0) {
-        return(str)
-      }
-      //otherwise, return 
-      return str + ',' + processArray(array);
-  	  //each element in the array, call strigifyJSON
-  	  //if element is undefined, ret null
+var processArray = function(array) {
+//get first element of array
+  var element = array.shift()
+    //stringify 
+  //if element is not an object, stringify
+  //if element is an object, stringify
+  str = nullReplace(stringifyJSON(element));
+  //if last element
+  if(obj.length === 0) {
+    return(str)
+  }
+  //otherwise, return 
+  return str + ',' + processArray(array);
+	  //each element in the array, call strigifyJSON
+	  //if element is undefined, ret null
+}
+
+var processObject = function(ob, keys) {
+  var key = keys.shift();
+  var element = stringifyJSON(ob[key]);
+  if(element === undefined) {
+	return processObject(ob, keys);
   }
 
-  var processObject = function(ob) {
-    var keys = Object.keys(ob);
-    
-    var element = stringifyJSON(ob[key]);
-    if(element === undefined) {
-    	return '';
-    }
-
-
-    return keyname + ':' + element;
-
-
-
-
+  if(keys.length === 0) {
+    return stringifyJSON(key) + ':' + element;
   }
+
+  return stringifyJSON(key) + ':' + element + ',' + processObject(ob, keys);
+
+}
+
+
+var stringifyJSON = function(obj) {
+  // your code goes here
+
 
   //Base Casses
   if(typeof(obj) === 'string') {
