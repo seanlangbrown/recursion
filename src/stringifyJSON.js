@@ -7,41 +7,53 @@ var nullReplace = function(str) {
   }
 
 var processArray = function(array) {
-//get first element of array
+
+  if(array.length === 0) {
+    //if array is empty, return blank
+    return '';
+  }
   var element = array.shift()
+  //get first element of array
     //stringify 
-  //if element is not an object, stringify
-  //if element is an object, stringify
+    //if element is undefined, ret null
   str = nullReplace(stringifyJSON(element));
   //if last element
-  if(obj.length === 0) {
+  if(array.length === 0) {
     return(str)
   }
-  //otherwise, return 
+  //otherwise, get next element
   return str + ',' + processArray(array);
-	  //each element in the array, call strigifyJSON
-	  //if element is undefined, ret null
+
 }
 
 var processObject = function(ob, keys) {
-  var key = keys.shift();
-  var element = stringifyJSON(ob[key]);
-  if(element === undefined) {
-	return processObject(ob, keys);
-  }
+  if(keys.length > 0) {
+    //get next key
+    var key = keys.shift();
+    var element = stringifyJSON(ob[key]);
+    if(element === undefined) {
+      //if element is undefined, omit (get next element)
+  	  return processObject(ob, keys);
+    }
 
-  if(keys.length === 0) {
-    return stringifyJSON(key) + ':' + element;
-  }
+    if(keys.length === 0) {
+      //if last element
+      return stringifyJSON(key) + ':' + element;
+    }
+    //if not last element in ob, get next element
+    return stringifyJSON(key) + ':' + element + ',' + processObject(ob, keys);
 
-  return stringifyJSON(key) + ':' + element + ',' + processObject(ob, keys);
+  } else {
+    //if object is empty
+    return '';
+  }
 
 }
 
 
 var stringifyJSON = function(obj) {
   // your code goes here
-
+  console.log(JSON.stringify(obj));
 
   //Base Casses
   if(typeof(obj) === 'string') {
@@ -52,11 +64,17 @@ var stringifyJSON = function(obj) {
   	//a number
       //return value as string
     return String(obj);
+  } else if (typeof(obj) === 'boolean') {
+    if (obj === true) {
+      return 'true';
+    } else {
+      return 'false';
+    }
   } else if (obj === undefined || typeof(obj) === 'function' || typeof(obj) === 'symbol') {
   	//undefined, function, symbol
       //return undefined
     return undefined;
-  } else if (typeof(obj) === 'null') {
+  } else if (obj === null) {
   	return 'null';
   //recursive cases
   } else if (typeof(obj) === 'object') {
@@ -67,11 +85,12 @@ var stringifyJSON = function(obj) {
     //an object
       //each element in the object, stringify key, stringify element
       //if undefined, omit
-      return '{' + processObject(obj) + '}';
+      var keys = Object.keys(obj);
+      return '{' + processObject(obj, keys) + '}';
   	}
   } else {
   	//unrecognized type
-  	console.log('strinigyJSON encountered an unrecognized type' + typeof(obj) + ':' + obj.tostring());
+  	console.log('strinigyJSON encountered an unrecognized type' + typeof(obj) + ':' + obj);
   	return undefined;
   }
 
